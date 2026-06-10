@@ -3,7 +3,8 @@ class MazeModel:
         self.grid = []
         with open(file_path, 'r') as f:
             for line in f:
-                self.grid.append(line.strip())
+                # Convert string line into a list of characters ['#', 'S', '#', ...]
+                self.grid.append(list(line.strip()))
 
     def get_height(self):
         return len(self.grid)
@@ -12,7 +13,6 @@ class MazeModel:
         return len(self.grid[0]) if self.grid else 0
 
     def get_start_position(self):
-        # Scan every row and column for 'S'
         for r in range(self.get_height()):
             for c in range(self.get_width()):
                 if self.grid[r][c] == 'S':
@@ -20,9 +20,16 @@ class MazeModel:
         return None
 
     def get_end_position(self):
-        # Scan every row and column for 'E'
         for r in range(self.get_height()):
             for c in range(self.get_width()):
                 if self.grid[r][c] == 'E':
                     return (r, c)
         return None
+
+    def get_symbol(self, r, c):
+        """Get character at row r, column c."""
+        return self.grid[r][c]
+
+    def set_symbol(self, r, c, symbol):
+        """Change character at row r, column c."""
+        self.grid[r][c] = symbol

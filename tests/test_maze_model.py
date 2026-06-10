@@ -23,6 +23,17 @@ class TestMazeModel(unittest.TestCase):
         # In small.txt, 'S' is at row 1, column 1. 'E' is at row 3, column 4.
         self.assertEqual(maze.get_start_position(), (1, 1))
         self.assertEqual(maze.get_end_position(), (3, 4))
+        
+    def test_modify_and_get_symbol(self):
+        """Step 3: Can we read and write symbols at specific coordinates?"""
+        maze = MazeModel(self.small_maze_path)
+        
+        # Initially, row 1, col 2 is a wall '#' in small.txt
+        self.assertEqual(maze.get_symbol(1, 2), '#')
+        
+        # Let's change it to a path '+'
+        maze.set_symbol(1, 2, '+')
+        self.assertEqual(maze.get_symbol(1, 2), '+')
 
 if __name__ == '__main__':
     unittest.main()
