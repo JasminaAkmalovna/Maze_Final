@@ -12,11 +12,25 @@ class TestDFSSolver(unittest.TestCase):
         """Step 1: Does the solver return True when a maze has a valid path?"""
         maze = MazeModel(self.small_maze_path)
         
-        # Act: Run the solver
-        result = solve_dfs(maze)
+        # --- ADD THESE LINES TO PRINT DEBUG ---
+        print("\n--- DEBUG MAZE ---")
+        for row in maze.grid:
+            print("".join(row))
+        print(f"Start pos: {maze.get_start_position()}")
+        print(f"End pos: {maze.get_end_position()}")
+        print("------------------")
         
-        # Assert: It should successfully return True
+        result = solve_dfs(maze)
         self.assertTrue(result)
+
+    def test_dfs_marks_visited_nodes(self):
+        """Step 2: Does the solver mark visited nodes correctly?"""
+        maze = MazeModel(self.small_maze_path)
+        
+        solve_dfs(maze)
+        
+        # (2, 1) is part of the final correct path, so it must be '+'
+        self.assertEqual(maze.get_symbol(2, 1), '+')
 
 if __name__ == '__main__':
     unittest.main()
