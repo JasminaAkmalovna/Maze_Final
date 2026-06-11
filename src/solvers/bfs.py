@@ -4,18 +4,20 @@ def solve_bfs(maze_model):
     start_pos = maze_model.get_start_position()
     end_pos = maze_model.get_end_position()
     
-    # The queue stores tuples of: (current_row, current_col)
     queue = deque([start_pos])
-    
-    # To keep track of where we came from, we'll use a dictionary:
-    # key: (child_row, child_col) -> value: (parent_row, parent_col)
     parent_map = {start_pos: None}
     
     while queue:
         r, c = queue.popleft()
         
-        # Base Case: We found the exit!
+        # Base Case: We found the exit! 
         if (r, c) == end_pos:
+            # --- BACKTRACKING TO DRAW THE FINAL SHORTEST PATH ---
+            # Start from the cell right before the exit
+            curr = parent_map[end_pos]
+            while curr and curr != start_pos:
+                maze_model.set_symbol(curr[0], curr[1], '+')
+                curr = parent_map[curr]
             return True
             
         # Explore neighbors: Up, Down, Left, Right
@@ -31,8 +33,13 @@ def solve_bfs(maze_model):
             if maze_model.get_symbol(nr, nc) == '#' or (nr, nc) in parent_map:
                 continue
                 
-            # Document the relationship and add to queue
+            # Document parent-child relationship
             parent_map[(nr, nc)] = (r, c)
+            
+            # If it's not the end goal, visually mark it as an explored/visited cell
+            if (nr, nc) != end_pos:
+                maze_model.set_symbol(nr, nc, '^')
+                
             queue.append((nr, nc))
             
     return False
