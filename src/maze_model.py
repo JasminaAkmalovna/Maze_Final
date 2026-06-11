@@ -1,10 +1,13 @@
 class MazeModel:
     def __init__(self, file_path):
         self.grid = []
-        with open(file_path, 'r') as f:
+        with open(file_path, 'r', encoding='utf-8') as f:
             for line in f:
-                # Convert string line into a list of characters ['#', 'S', '#', ...]
-                self.grid.append(list(line.strip()))
+                # Remove the trailing newline character
+                clean_line = line.rstrip('\r\n')
+                # CRITICAL FIX: Replace non-breaking spaces with standard ASCII spaces
+                clean_line = clean_line.replace('\xa0', ' ')
+                self.grid.append(list(clean_line))
 
     def get_height(self):
         return len(self.grid)
@@ -27,9 +30,7 @@ class MazeModel:
         return None
 
     def get_symbol(self, r, c):
-        """Get character at row r, column c."""
         return self.grid[r][c]
 
     def set_symbol(self, r, c, symbol):
-        """Change character at row r, column c."""
         self.grid[r][c] = symbol
